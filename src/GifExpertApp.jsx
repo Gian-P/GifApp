@@ -1,39 +1,36 @@
 
 import { useState} from 'react';
+import { AddCategory } from './components/AddCategory';
+import { GifGrid } from './components/GifGrid';
 
 export const GifExpertApp = () => {
-  const [ categories,setCategories ] = useState(['One punch', 'Dragon ball z']);
+  
+  const [ categories, setCategories ] = useState(['One punch']);
 
-  // Tarea: Agrega un nuevo elemento al listado de categorias.
+  const onAddCategory = ( newCategory ) => {
 
-  const onAddCategory = () => {
-
-    let value = prompt("your Prompt here");
+    if(categories.includes(newCategory)) return;
 
     // Cuando necesitemos actualizar el estado no podemos mutarlo, sino que debemos crear uno desde 0 con esta estructura.
-    setCategories(categories => [...categories, value]);
+    setCategories([newCategory, ...categories]);
   }
 
   return (
     <>
-      {/* titulo */}
+        <h1>GifExpertApp</h1>
 
-      <h1>GifExpertApp</h1>
+        <AddCategory 
+            onNewCategory =  { onAddCategory }
+        />
 
-      {/* Input */}
-
-      {/* Listado de Gif */}
-      <button onClick={ onAddCategory }>Agregar</button>
-      <ol>
         { 
-            categories.map( category => {
-              //La llave debe ser unica.
-            return <li key = { category }>{ category }</li>
-          })
-        }
-        
-      </ol>
-        {/* Gif Item */}
+            categories.map( ( category ) => (
+                <GifGrid 
+                    key={ category } 
+                    category={ category }
+                />
+            ))
+        } 
     </>
   )
 }
