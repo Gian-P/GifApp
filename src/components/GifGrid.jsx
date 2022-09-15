@@ -1,37 +1,31 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { getGifs } from "../helpers/getGifs"
+import { useFetchGifs } from "../hooks/useFetchGifs";
+import { GifItem } from "./GifItem";
 
 export const GifGrid = ({ category }) => {
 
-  const [images, SetImages] = useState([]);
-
-  //Como segundo argumento le pasamos una lista de depencias, esta en forma de array, como la mandamos vacia quiere decir que esta funcion solo se llamara la primera vez que se construya este componente.
-
-  const getImages = async() => {
-    const newImages = await getGifs( category);
-    SetImages(newImages);
-  }
-
-  useEffect( () =>  {
-    getImages();
-  }, [])
-
+  const { images, isLoading } = useFetchGifs( category );
 
   return (
     <>
         <h3>{ category }</h3>
+        {
+          //isLoading ? ( <h2>Cargando...</h2> ) : null
+          isLoading && (<h2>Cargando...</h2>)
+        }
 
-        {/* Las imagenes van aqui debajo */}
-        {/* images.map */}
-
-        <ol>
+        <div className="card-grid">
           {        
-              images.map( ({id,title}) => 
-                <li key={id}>{title}</li>
+              images.map( (image) => 
+                <GifItem 
+                    key = {image.id}
+                    { ...image }           
+                />
               )
           } 
-        </ol>
+        </div>
     </>
   )
 }
